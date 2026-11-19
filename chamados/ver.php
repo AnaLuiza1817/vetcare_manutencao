@@ -19,7 +19,12 @@ include __DIR__.'/../includes/header.php';
 ?>
 <h1>Chamado #<?=str_pad($id,4,'0',STR_PAD_LEFT)?></h1>
 <?php if(isset($_GET['novo'])):?><div class="alert success">Chamado registrado com sucesso.</div><?php endif;?>
-<div class="actions"><a class="btn secondary" href="index.php">← Voltar à central</a></div>
+<div class="actions">
+    <a class="btn btn-neutral" href="index.php" title="Voltar à central" aria-label="Voltar à central">
+        <?= vetcareIcon('x') ?>
+        <span>Voltar à central</span>
+    </a>
+</div>
 <section class="panel"><div class="grid"><div><span class="muted">Status</span><h2><?=htmlspecialchars($c['status'])?></h2></div><div><span class="muted">Prioridade</span><h2><?=htmlspecialchars($c['prioridade'])?></h2></div><div><span class="muted">Severidade</span><h2><?=htmlspecialchars($c['severidade'])?></h2></div><div><span class="muted">Módulo</span><h2><?=htmlspecialchars($c['modulo'])?></h2></div></div>
 <h2><?=htmlspecialchars($c['titulo'])?></h2>
 <p><b>Solicitante:</b> <?=htmlspecialchars($c['solicitante'])?> &nbsp; <b>Equipe:</b> <?=htmlspecialchars($c['equipe']?:'Não informada')?></p>
@@ -36,7 +41,11 @@ include __DIR__.'/../includes/header.php';
 <div class="field"><label>Seu nome *</label><input name="autor" required></div>
 <div class="field"><label>Responsável pelo chamado</label><input name="responsavel" value="<?=htmlspecialchars($c['responsavel']??'')?>"></div>
 <div class="field"><label>Novo status</label><select name="status"><?php foreach(['Aberto','Em análise','Aguardando informações','Resolvido','Fechado'] as $v):?><option <?=$c['status']===$v?'selected':''?>><?=$v?></option><?php endforeach;?></select></div>
-</div><div class="field"><label>Comentário / ação realizada *</label><textarea name="comentario" placeholder="Registre análise, solicitação de informação, solução aplicada ou teste de validação..." required></textarea></div><button>Salvar atualização</button></form>
+</div><div class="field"><label>Comentário / ação realizada *</label><textarea name="comentario" placeholder="Registre análise, solicitação de informação, solução aplicada ou teste de validação..." required></textarea></div>
+<button type="submit" title="Salvar atualização do chamado" aria-label="Salvar atualização do chamado">
+<?= vetcareIcon('check') ?>
+<span>Salvar atualização</span>
+</button></form>
 </section>
 <section class="panel"><h2>Histórico do chamado</h2>
 <?php if(!$historico):?><p class="muted">Ainda não há atualizações.</p><?php endif;?>

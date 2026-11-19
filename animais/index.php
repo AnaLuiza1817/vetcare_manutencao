@@ -21,7 +21,10 @@ include __DIR__ . '/../includes/header.php';
 <p class="muted">Pacientes cadastrados na clínica.</p>
 
 <div class="actions">
-    <a class="btn" href="form.php">+ Novo animal</a>
+    <a class="btn" href="form.php" title="Adicionar novo animal" aria-label="Adicionar novo animal">
+        <?= vetcareIcon('plus') ?>
+        <span>Novo animal</span>
+    </a>
 </div>
 
 <div class="panel table-wrap">
@@ -38,9 +41,15 @@ include __DIR__ . '/../includes/header.php';
 
         <?php foreach ($rows as $r): ?>
             <?php
-                $idade = $r['nascimento']
-                    ? date('Y') - (int) date('Y', strtotime($r['nascimento']))
-                    : 0; // F07: ignora mês e dia
+                $idade = 0;
+                if (!empty($r['nascimento'])) {
+                    try {
+                        $dataNascimento = new DateTimeImmutable($r['nascimento']);
+                        $idade = (new DateTimeImmutable('today'))->diff($dataNascimento)->y;
+                    } catch (Exception $e) {
+                        $idade = 0;
+                    }
+                }
             ?>
             <tr>
                 <td><?= htmlspecialchars($r['nome']) ?></td>
@@ -49,9 +58,15 @@ include __DIR__ . '/../includes/header.php';
                 <td><?= htmlspecialchars($r['tutor']) ?></td>
                 <td><?= $r['nascimento'] ? date('d/m/Y', strtotime($r['nascimento'])) : '-' ?></td>
                 <td><?= $idade ?> ano(s)</td>
-                <td>
-                    <a href="form.php?id=<?= $r['id'] ?>">Editar</a> |
-                    <a href="excluir.php?id=<?= $r['id'] ?>">Excluir</a>
+                <td class="actions-cell">
+                    <a class="link-btn" href="form.php?id=<?= (int) $r['id'] ?>" title="Editar animal" aria-label="Editar animal <?= htmlspecialchars($r['nome']) ?>">
+                        <?= vetcareIcon('pencil') ?>
+                        <span>Editar</span>
+                    </a>
+                    <a class="link-btn danger" href="excluir.php?id=<?= (int) $r['id'] ?>" title="Excluir animal" aria-label="Excluir animal <?= htmlspecialchars($r['nome']) ?>">
+                        <?= vetcareIcon('trash-2') ?>
+                        <span>Excluir</span>
+                    </a>
                 </td>
             </tr>
         <?php endforeach; ?>
